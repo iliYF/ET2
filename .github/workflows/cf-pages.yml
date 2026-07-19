@@ -37,5 +37,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: cf-pages
           publish_dir: ./dist
-          force_orphan: true
+          # force_orphan: true
           commit_message: 'deploy: sync from main [skip ci]'
