@@ -38,6 +38,10 @@ if (!fs.existsSync(pagePath)) {
 var pageHtml = fs.readFileSync(pagePath, 'utf8');
 var workerContent = fs.readFileSync(path.join(ROOT, '_worker.js'), 'utf8');
 
+// Replace default datetime in page with actual build timestamp
+var buildVersion = process.env.BUILD_VERSION || '2026-07-19 07:19:00';
+pageHtml = pageHtml.replace(/2026-07-19 07:19:00/g, buildVersion);
+
 // ---------------------------------------------------------------------------
 // 3.  Minify CSS and HTML
 // ---------------------------------------------------------------------------
