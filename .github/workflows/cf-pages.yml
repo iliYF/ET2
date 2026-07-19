@@ -14,7 +14,7 @@ on:
       custom_page_file:
         description: 'Static page to inject (e.g. pages/custom.html)'
         required: true
-        default: 'pages/custom.html'
+        default: 'pages/et.html'
 
 jobs:
   build-and-deploy:
@@ -29,7 +29,7 @@ jobs:
       - name: Build cf-pages distribution
         run: node scripts/build-cf-pages.js
         env:
-          CUSTOM_PAGE_FILE: ${{ github.event.inputs.custom_page_file || 'pages/custom.html' }}
+          CUSTOM_PAGE_FILE: ${{ github.event.inputs.custom_page_file || 'pages/et.html' }}
 
       - name: Deploy to cf-pages branch
         uses: peaceiris/actions-gh-pages@v4
