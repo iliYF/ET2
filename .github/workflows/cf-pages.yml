@@ -47,7 +47,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.SAFE }}
-          name: EdgeTunnel ${{ steps.version.outputs.DISPLAY }}
+          name: ET2 v${{ steps.version.outputs.SAFE }}
           body: |
             Build time: ${{ steps.version.outputs.DISPLAY }} (UTC)
             Page: ${{ github.event.inputs.custom_page_file || 'pages/et.html' }}
@@ -63,4 +63,4 @@ jobs:
           publish_branch: cf-pages
           publish_dir: ./dist
           # force_orphan: true
-          commit_message: 'deploy: sync from main [skip ci]'
+          commit_message: 'deploy: ET2 v${{ steps.version.outputs.SAFE }}'
