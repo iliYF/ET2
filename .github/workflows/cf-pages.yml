@@ -15,7 +15,6 @@ on:
         description: 'Static page to inject (e.g. pages/custom.html)'
         required: true
         default: 'pages/et.html'
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -37,6 +36,9 @@ jobs:
         env:
           CUSTOM_PAGE_FILE: ${{ github.event.inputs.custom_page_file || 'pages/et.html' }}
           BUILD_VERSION: ${{ steps.version.outputs.DISPLAY }}
+
+      - name: Validate distribution
+        run: bash scripts/validate-distribution.sh
 
       - name: Package distribution
         run: |

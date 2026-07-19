@@ -12,6 +12,7 @@ pnpm-lock.yaml
 # 构建产物
 dist/
 build/
+output/
 *.wasm
 GRAINTCP_*
 
@@ -39,4 +40,5 @@ yarn-debug.log*
 yarn-error.log*
 log/
 
-.local*
+# 本地文件
+*.local*

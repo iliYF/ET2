@@ -23,7 +23,6 @@ var ROOT = path.join(__dirname, '..');
 
 var pageFile = process.env.CUSTOM_PAGE_FILE || 'pages/custom.html';
 var pagePath = path.join(ROOT, pageFile);
-
 console.log('CUSTOM_PAGE_FILE = ' + pageFile);
 
 // ---------------------------------------------------------------------------
