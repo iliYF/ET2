@@ -1,0 +1,41 @@
+name: Deploy to cf-pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_worker.js'
+      - 'wrangler.toml'
+      - 'pages/**'
+      - 'scripts/build-cf-pages.js'
+      - '.github/workflows/cf-pages.yml'
+  workflow_dispatch:
+    inputs:
+      custom_page_file:
+        description: 'Static page to inject (e.g. pages/custom.html)'
+        required: true
+        default: 'pages/custom.html'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build cf-pages distribution
+        run: node scripts/build-cf-pages.js
+        env:
+          CUSTOM_PAGE_FILE: ${{ github.event.inputs.custom_page_file || 'pages/custom.html' }}
+
+      - name: Deploy to cf-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: cf-pages
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: 'deploy: sync from main [skip ci]'
