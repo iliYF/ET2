@@ -28,14 +28,14 @@ jobs:
       - name: Set build version
         id: version
         run: |
-          echo "DISPLAY=$(date -u +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
-          echo "SAFE=$(date -u +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
+          echo "BUILD_TIME=$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S')" >> $GITHUB_OUTPUT
+          echo "BUILD_TIMESTAMP=$(TZ='Asia/Shanghai' date +'%Y%m%d%H%M%S')" >> $GITHUB_OUTPUT
 
       - name: Build cf-pages distribution
         run: node scripts/build-cf-pages.js
         env:
           CUSTOM_PAGE_FILE: ${{ github.event.inputs.custom_page_file || 'pages/et.html' }}
-          BUILD_VERSION: ${{ steps.version.outputs.DISPLAY }}
+          BUILD_VERSION: ${{ steps.version.outputs.BUILD_TIME }}
 
       - name: Validate distribution
         run: bash scripts/validate-distribution.sh
@@ -43,18 +43,18 @@ jobs:
       - name: Package distribution
         run: |
           cd dist
-          zip -r ../et2-release-v${{ steps.version.outputs.SAFE }}.zip .
+          zip -r ../et2-release-v${{ steps.version.outputs.BUILD_TIMESTAMP }}.zip .
 
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: v${{ steps.version.outputs.SAFE }}
-          name: ET2 v${{ steps.version.outputs.SAFE }}
+          tag_name: v${{ steps.version.outputs.BUILD_TIMESTAMP }}
+          name: ET2 v${{ steps.version.outputs.BUILD_TIMESTAMP }}
           body: |
-            Build time: ${{ steps.version.outputs.DISPLAY }} (UTC)
+            Build time: ${{ steps.version.outputs.BUILD_TIME }} (UTC+8)
             Page: ${{ github.event.inputs.custom_page_file || 'pages/et.html' }}
             Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
-          files: et2-release-v${{ steps.version.outputs.SAFE }}.zip
+          files: et2-release-v${{ steps.version.outputs.BUILD_TIMESTAMP }}.zip
           draft: false
           prerelease: false
 
@@ -65,4 +65,4 @@ jobs:
           publish_branch: cf-pages
           publish_dir: ./dist
           # force_orphan: true
-          commit_message: 'deploy: ET2 v${{ steps.version.outputs.SAFE }}'
+          commit_message: 'deploy: ET2 v${{ steps.version.outputs.BUILD_TIMESTAMP }}'
