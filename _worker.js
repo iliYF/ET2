@@ -6128,7 +6128,7 @@ async function htmlCustom() {
 	<div class="overlay-content">
 	<div class="logo-big">ET<span>AI</span></div>
 	<p class="overlay-hint">请完成安全验证后访问页面</p>
-	<div class="cf-turnstile" data-sitekey="0x4AAAAAAD7XTxIuYdlCbdo_" data-callback="onTurnstileSuccess"></div>
+	<div class="cf-turnstile" data-sitekey="0x4AAAAAAD7Y-TXbwiA-HfYR" data-callback="onTurnstileSuccess"></div>
 	</div>
 	</div>
 	<!-- Main page content (hidden until Turnstile passes) -->
@@ -6218,7 +6218,7 @@ async function htmlCustom() {
 	<div class="version-bar">
 	<div class="version-group">
 	<span class="version-label">Build</span>
-	<span class="version-value">2026-07-23 00:51:52</span>
+	<span class="version-value">2026-07-23 01:01:21</span>
 	</div>
 	<span class="version-divider"></span>
 	<div class="version-group">
