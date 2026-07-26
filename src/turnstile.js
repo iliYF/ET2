@@ -3,6 +3,10 @@
  *
  * 提供 API 接口供前端查询 site key 和验证 token。
  * 验证通过后下发签名 Cookie，后续请求凭 Cookie 跳过验证，避免频繁弹出。
+ * 
+ * https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/
+ * 
+ * https://developers.cloudflare.com/workers/examples/turnstile-html-rewriter/
  */
 
 const COOKIE_NAME = 'ts_verified';

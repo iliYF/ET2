@@ -6,7 +6,9 @@
   "scripts": {
     "build": "rm -rf dist && wrangler deploy --dry-run  && cp wrangler.jsonc dist/",
     "deploy": "wrangler deploy",
+    "deploy:pages": "npm run build && wrangler pages deploy dist --project-name et2-xhub",
     "dev": "WRANGLER_LOCAL=true wrangler dev",
+    "dev:pages": "WRANGLER_LOCAL=true wrangler pages dev dist",
     "start": "WRANGLER_LOCAL=true wrangler dev",
     "test": "vitest"
   },

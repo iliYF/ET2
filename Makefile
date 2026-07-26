@@ -23,3 +23,6 @@ preview:
 
 deploy:
 	npm run deploy
+
+deploy-pages:
+	npm run deploy:pages
