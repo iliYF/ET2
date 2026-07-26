@@ -1,943 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>vHub | AI应用与Agent开发导航</title>
-    <link rel="preconnect" href="https://challenges.cloudflare.com" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #ffffff;
-            --bg-subtle: #f8f9fb;
-            --card-bg: #ffffff;
-            --card-border: #e8eaee;
-            --card-border-hover: #c8ccd4;
-            --accent: #5b21b6;
-            --accent-light: rgba(91, 33, 182, 0.08);
-            --accent-dim: rgba(91, 33, 182, 0.4);
-            --text-primary: #111111;
-            --text-secondary: #3a3c42;
-            --text-muted: #6b7078;
-            --logo-bg: #ff9900;
-            --footer-text: #a0a5ab;
-            --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --bg: #ffffff; --bg-subtle: #f8f9fb; --card-bg: #ffffff;
+            --card-border: #e8eaee; --card-border-hover: #c8ccd4;
+            --accent: #5b21b6; --accent-light: rgba(91,33,182,0.08);
+            --accent-dim: rgba(91,33,182,0.4); --text-primary: #111111;
+            --text-secondary: #3a3c42; --text-muted: #6b7078;
+            --logo-bg: #ff9900; --footer-text: #a0a5ab;
+            --font-sans: 'Inter',system-ui,-apple-system,sans-serif;
+            --font-mono: 'JetBrains Mono',monospace;
         }
-
         [data-theme="dark"] {
-            --bg: #0a0a0b;
-            --bg-subtle: #141416;
-            --card-bg: #0e0e10;
-            --card-border: #1c1c1f;
-            --card-border-hover: #333;
-            --accent: #a855f7;
-            --accent-light: rgba(168, 85, 247, 0.12);
-            --accent-dim: rgba(168, 85, 247, 0.4);
-            --text-primary: #f0f0f2;
-            --text-secondary: #a1a1aa;
-            --text-muted: #71717a;
-            --logo-bg: #7c3aed;
-            --footer-text: #ffffff;
+            --bg: #0a0a0b; --bg-subtle: #141416; --card-bg: #0e0e10;
+            --card-border: #1c1c1f; --card-border-hover: #333;
+            --accent: #a855f7; --accent-light: rgba(168,85,247,0.12);
+            --accent-dim: rgba(168,85,247,0.4); --text-primary: #f0f0f2;
+            --text-secondary: #a1a1aa; --text-muted: #71717a;
+            --logo-bg: #7c3aed; --footer-text: #ffffff;
         }
-
         @media (prefers-color-scheme: dark) {
             :root:not([data-theme="light"]) {
-                --bg: #0a0a0b;
-                --bg-subtle: #141416;
-                --card-bg: #0e0e10;
-                --card-border: #1c1c1f;
-                --card-border-hover: #333;
-                --accent: #a855f7;
-                --accent-light: rgba(168, 85, 247, 0.12);
-                --accent-dim: rgba(168, 85, 247, 0.4);
-                --text-primary: #f0f0f2;
-                --text-secondary: #a1a1aa;
-                --text-muted: #71717a;
-                --logo-bg: #7c3aed;
-                --footer-text: #ffffff;
+                --bg: #0a0a0b; --bg-subtle: #141416; --card-bg: #0e0e10;
+                --card-border: #1c1c1f; --card-border-hover: #333;
+                --accent: #a855f7; --accent-light: rgba(168,85,247,0.12);
+                --accent-dim: rgba(168,85,247,0.4); --text-primary: #f0f0f2;
+                --text-secondary: #a1a1aa; --text-muted: #71717a;
+                --logo-bg: #7c3aed; --footer-text: #ffffff;
             }
         }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            font-family: var(--font-sans);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* ===== HEADER ===== */
-        header {
-            width: 100%;
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--card-border);
-        }
-
-        .ph-logo {
-            display: flex;
-            align-items: center;
-            font-family: var(--font-sans);
-            font-size: 2rem;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .ph-logo .logo-v {
-            color: var(--accent);
-            padding: 2px 0;
-        }
-
-        [data-theme="dark"] .ph-logo .logo-v {
-            color: #ffffff;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .ph-logo .logo-v {
-                color: #ffffff;
-            }
-        }
-
-        .ph-logo .logo-hub {
-            color: #111111;
-            background: #ff9900;
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-left: 2px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .status-badge {
-            display: flex;
-            align-items: center;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-            flex-shrink: 0;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.4;
-            }
-
-            50% {
-                opacity: 1;
-            }
-        }
-
-        .lang-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .lang-btn {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.2s ease;
-            user-select: none;
-        }
-
-        .lang-btn:hover {
-            color: var(--accent);
-        }
-
-        .lang-btn svg {
-            display: block;
-        }
-
-        .lang-dropdown {
-            position: absolute;
-            top: calc(100% + 6px);
-            right: 0;
-            background: var(--bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            overflow: hidden;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-4px);
-            transition: all 0.2s ease;
-            z-index: 100;
-            min-width: 100px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-        }
-
-        .lang-dropdown.open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .lang-dropdown-item {
-            padding: 0.5rem 0.9rem;
-            font-size: 0.85rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--text-secondary);
-            transition: all 0.1s ease;
-        }
-
-        .lang-dropdown-item:hover {
-            background: var(--bg-subtle);
-            color: var(--text-primary);
-        }
-
-        .lang-dropdown-item.active {
-            color: var(--accent);
-            font-weight: 600;
-        }
-
-        .lang-dropdown-item .check {
-            margin-left: auto;
-            opacity: 0;
-        }
-
-        .lang-dropdown-item.active .check {
-            opacity: 1;
-        }
-
-        /* ===== THEME TOGGLE ===== */
-        .theme-btn {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: color 0.2s ease;
-            user-select: none;
-            color: var(--text-secondary);
-        }
-
-        .theme-btn:hover {
-            color: var(--accent);
-        }
-
-        .theme-icon-sun,
-        .theme-icon-moon {
-            display: none;
-        }
-
-        [data-theme="dark"] .theme-icon-moon,
-        :root:not([data-theme="dark"]) .theme-icon-sun {
-            display: block;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .theme-icon-moon {
-                display: block;
-            }
-
-            :root:not([data-theme="light"]) .theme-icon-sun {
-                display: none;
-            }
-        }
-
-        /* ===== HERO ===== */
-        .hero {
-            max-width: 720px;
-            margin: 6rem auto 4rem auto;
-            text-align: center;
-            padding: 0 1.5rem;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 0.8rem;
-            border: 1px solid var(--card-border);
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.3px;
-        }
-
-        .hero-badge .badge-dot {
-            width: 5px;
-            height: 5px;
-            background: var(--accent);
-            border-radius: 50%;
-        }
-
-        .hero h1 {
-            font-family: var(--font-sans);
-            font-size: 3.2rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.03em;
-            line-height: 1.15;
-            color: var(--text-primary);
-        }
-
-        .hero h1 .highlight {
-            color: var(--accent);
-        }
-
-        .hero p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            line-height: 1.7;
-            font-weight: 400;
-            max-width: 560px;
-            margin: 0 auto;
-        }
-
-        /* ===== CONTAINER & CARDS ===== */
-        .container {
-            max-width: 1120px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 1.5rem 5rem 1.5rem;
-            flex-grow: 1;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1.5rem;
-        }
-
-        .grid-title {
-            font-size: 0.85rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-        }
-
-        .section-count {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .tool-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 10px;
-            padding: 1.5rem 1.5rem 1.5rem 1.5rem;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .tool-card:hover {
-            border-color: var(--card-border-hover);
-            background: var(--bg-subtle);
-        }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            background: var(--accent-light);
-            font-size: 1.2rem;
-        }
-
-        .card-body {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .card-body-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.3rem;
-        }
-
-        .tool-card h3 {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .go-arrow {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            transition: all 0.2s ease;
-            opacity: 0;
-        }
-
-        .tool-card:hover .go-arrow {
-            opacity: 1;
-            color: var(--accent);
-        }
-
-        .tool-card p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.5;
-            font-weight: 400;
-        }
-
-        /* ===== FOOTER ===== */
-        footer {
-            width: 100%;
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 1.5rem 1.5rem 2rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--card-border);
-            font-size: 0.8rem;
-            color: var(--footer-text);
-        }
-
-        footer p {
-            order: 1;
-        }
-
-        .links-wrapper {
-            display: flex;
-            gap: 0.75rem;
-            order: 2;
-        }
-
-        .eco-link {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        [data-theme="dark"] .eco-link {
-            color: #ffffff;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            :root:not([data-theme="light"]) .eco-link {
-                color: #ffffff;
-            }
-        }
-
-        .eco-link:hover {
-            color: var(--accent);
-        }
-
-        .eco-link span {
-            font-size: 0.65rem;
-        }
-
-        /* ===== TURNSTILE OVERLAY ===== */
-        html,
-        body {
-            height: 100%;
-        }
-
-        #turnstile-overlay {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: 100vw !important;
-            height: 100vh !important;
-            z-index: 99999 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            justify-content: flex-start !important;
-            background: #ffffff !important;
-            color: #111111 !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-            transition: opacity 0.6s ease;
-        }
-
-        #turnstile-overlay.visible {
-            opacity: 1 !important;
-            pointer-events: auto !important;
-        }
-
-        .overlay-content {
-            text-align: left;
-            max-width: 700px;
-            padding: 5rem 3rem 5rem 6rem;
-            color: #111111;
-        }
-
-        .overlay-header {
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            margin-bottom: 1.75rem;
-        }
-
-        .et-icon {
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-        }
-
-        .overlay-content h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin: 0;
-            white-space: nowrap;
-            letter-spacing: -0.02em;
-        }
-
-        .overlay-content h2 {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1d1d1f;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
-
-        .overlay-content p {
-            font-size: 1.05rem;
-            color: #3a3c42;
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
-            white-space: nowrap;
-        }
-
-        #main-content.visible {
-            display: block !important;
-            animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(12px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ===== RESPONSIVE ===== */
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{background:var(--bg);color:var(--text-primary);min-height:100vh;display:flex;flex-direction:column;font-family:var(--font-sans);-webkit-font-smoothing:antialiased}
+        header{width:100%;max-width:1120px;margin:0 auto;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--card-border)}
+        .ph-logo{display:flex;align-items:center;font-family:var(--font-sans);font-size:2rem;font-weight:800;line-height:1}
+        .ph-logo .logo-v{color:var(--accent);padding:2px 0}[data-theme="dark"] .ph-logo .logo-v{color:#fff}
+        @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .ph-logo .logo-v{color:#fff}}
+        .ph-logo .logo-hub{color:#111;background:#ff9900;padding:2px 8px;border-radius:4px;margin-left:2px}
+        .header-right{display:flex;align-items:center;gap:1rem}
+        .status-badge{display:flex;align-items:center}
+        .status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+        @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+        .lang-wrapper{position:relative;display:flex;align-items:center}.header-right{display:flex;align-items:center;gap:12px}
+        .lang-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:color .2s ease;user-select:none}
+        .lang-btn:hover{color:var(--accent)}.lang-btn svg{display:block}
+        .lang-dropdown{position:absolute;top:calc(100% + 6px);right:0;background:var(--bg);border:1px solid var(--card-border);border-radius:8px;overflow:hidden;opacity:0;visibility:hidden;transform:translateY(-4px);transition:all .2s ease;z-index:100;min-width:100px;box-shadow:0 8px 24px rgba(0,0,0,.06)}
+        .lang-dropdown.open{opacity:1;visibility:visible;transform:translateY(0)}
+        .lang-dropdown-item{padding:.5rem .9rem;font-size:.85rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:.5rem;color:var(--text-secondary);transition:all .1s ease}
+        .lang-dropdown-item:hover{background:var(--bg-subtle);color:var(--text-primary)}
+        .lang-dropdown-item.active{color:var(--accent);font-weight:600}
+        .lang-dropdown-item .check{margin-left:auto;opacity:0}.lang-dropdown-item.active .check{opacity:1}
+        .theme-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s ease;user-select:none;color:var(--text-secondary)}
+        .theme-btn:hover{color:var(--accent)}.theme-icon-sun,.theme-icon-moon{display:none}
+        [data-theme="dark"] .theme-icon-moon,:root:not([data-theme="dark"]) .theme-icon-sun{display:block}
+        @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .theme-icon-moon{display:block}:root:not([data-theme="light"]) .theme-icon-sun{display:none}}
+        .hero{max-width:720px;margin:6rem auto 4rem auto;text-align:center;padding:0 1.5rem}
+        .hero-badge{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .8rem;border:1px solid var(--card-border);border-radius:6px;font-size:.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:1.5rem;letter-spacing:.3px}
+        .hero-badge .badge-dot{width:5px;height:5px;background:var(--accent);border-radius:50%}
+        .hero h1{font-family:var(--font-sans);font-size:3.2rem;font-weight:800;margin-bottom:1.2rem;letter-spacing:-.03em;line-height:1.15;color:var(--text-primary)}
+        .hero h1 .highlight{color:var(--accent)}
+        .hero p{color:var(--text-secondary);font-size:1.1rem;line-height:1.7;font-weight:400;max-width:560px;margin:0 auto}
+        .container{max-width:1120px;width:100%;margin:0 auto;padding:0 1.5rem 5rem 1.5rem;flex-grow:1}
+        .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+        .grid-title{font-size:.85rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.8px}
+        .section-count{font-size:.8rem;color:var(--text-muted);font-weight:500}
+        .tools-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+        .tool-card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:1.5rem;text-decoration:none;color:inherit;transition:all .25s ease;display:flex;align-items:flex-start;gap:1rem}
+        .tool-card:hover{border-color:var(--card-border-hover);background:var(--bg-subtle)}
+        .card-icon{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:8px;background:var(--accent-light);font-size:1.2rem}
+        .card-body{flex:1;min-width:0}.card-body-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
+        .tool-card h3{font-size:1rem;font-weight:700;color:var(--text-primary)}
+        .go-arrow{font-size:.85rem;color:var(--text-muted);transition:all .2s ease;opacity:0}
+        .tool-card:hover .go-arrow{opacity:1;color:var(--accent)}
+        .tool-card p{color:var(--text-secondary);font-size:.85rem;line-height:1.5;font-weight:400}
+        footer{width:100%;max-width:1120px;margin:0 auto;padding:1.5rem 1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--card-border);font-size:.8rem;color:var(--footer-text)}
+        footer p{order:1}.links-wrapper{display:flex;gap:.75rem;order:2}
+        .eco-link{color:var(--text-muted);text-decoration:none;font-size:.8rem;font-weight:500;transition:color .2s ease}
+        [data-theme="dark"] .eco-link{color:#fff}
+        @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .eco-link{color:#fff}}
+        .eco-link:hover{color:var(--accent)}.eco-link span{font-size:.65rem}
         @media (max-width: 768px) {
-            .hero {
-                margin: 4rem auto 3rem auto;
-            }
-
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tool-card {
-                padding: 1.2rem;
-            }
-
-            header {
-                padding: 0.8rem 1rem;
-            }
-
-            footer {
-                flex-direction: column;
-                gap: 0.8rem;
-                text-align: center;
-            }
-
-            footer p {
-                order: 2;
-            }
-
-            .links-wrapper {
-                order: 1;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 1.7rem;
-            }
-
-            .status-badge {
-                display: none;
-            }
-
-            .ph-logo {
-                font-size: 1.3rem;
-            }
+            .overlay-content{padding:3rem 2rem 3rem 2rem;max-width:100%}#turnstile-overlay.visible{padding-top:20vh}
+            .overlay-content h1{font-size:1.8rem;white-space:normal}.overlay-content h2{font-size:1.4rem}
+            .overlay-content p{white-space:normal}.tools-grid{grid-template-columns:1fr}.hero{margin-top:3rem}
+            .hero h1{font-size:2.4rem}header{padding:.75rem 1rem}footer{flex-direction:column;gap:1rem;text-align:center}
         }
     </style>
-    <link rel="preconnect" href="https://challenges.cloudflare.com" />
-    </head>
-
+</head>
 <body>
-    <!-- Turnstile verification overlay -->
-    <div id="turnstile-overlay">
-        <div class="overlay-content">
-            <div class="overlay-header">
-                <svg class="et-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="et-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#a855f7" />
-                            <stop offset="1" stop-color="#6366f1" />
-                        </linearGradient>
-                    </defs>
-                    <!-- Alien head -->
-                    <ellipse cx="32" cy="34" rx="20" ry="18" fill="url(#et-grad)" />
-                    <!-- Left eye -->
-                    <ellipse cx="24" cy="30" rx="5" ry="8" fill="#fff" fill-opacity="0.85" />
-                    <ellipse cx="24" cy="30" rx="2.5" ry="5" fill="#1d1d1f" />
-                    <!-- Right eye -->
-                    <ellipse cx="40" cy="30" rx="5" ry="8" fill="#fff" fill-opacity="0.85" />
-                    <ellipse cx="40" cy="30" rx="2.5" ry="5" fill="#1d1d1f" />
-                    <!-- Antennae -->
-                    <path d="M26 18l-8-10" stroke="url(#et-grad)" stroke-width="3" stroke-linecap="round" />
-                    <path d="M38 18l8-10" stroke="url(#et-grad)" stroke-width="3" stroke-linecap="round" />
-                    <circle cx="18" cy="8" r="3" fill="url(#et-grad)" />
-                    <circle cx="46" cy="8" r="3" fill="url(#et-grad)" />
-                </svg>
-                <h1 id="host-display"></h1>
-            </div>
-            <h2 id="turnstile-title">正在进行安全验证</h2>
-            <p id="turnstile-status">本网站使用安全服务防护恶意自动程序。在验证您不是自动程序期间，将显示此页面。</p>
-            <div id="turnstile-widget"></div>
-        </div>
-    </div>
-    <!-- Main page content (hidden until Turnstile passes) -->
     <div id="main-content">
         <header>
             <div class="ph-logo"><span class="logo-v">v</span><span class="logo-hub">Hub</span></div>
             <div class="header-right">
-                <div class="status-badge">
-                    <div class="status-dot"></div>
-                </div>
+                <div class="status-badge"><div class="status-dot"></div></div>
                 <div class="lang-wrapper">
-                    <div class="lang-btn" onclick="toggleDropdown()">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10" />
-                            <path d="M2 12h20" />
-                            <path
-                                d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    <div class="lang-btn" onclick="toggleDropdown()" title="Select language">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                         </svg>
                     </div>
                     <div class="lang-dropdown" id="langDropdown">
-                        <div class="lang-dropdown-item active" data-lang="en" onclick="setLanguage('en')">
-                            EN <span class="check">✓</span>
-                        </div>
-                        <div class="lang-dropdown-item" data-lang="zh" onclick="setLanguage('zh')">
-                            中文 <span class="check">✓</span>
-                        </div>
+                        <div class="lang-dropdown-item" onclick="setLanguage('en')" data-lang="en">English <span class="check">✔</span></div>
+                        <div class="lang-dropdown-item" onclick="setLanguage('zh')" data-lang="zh">中文 <span class="check">✔</span></div>
                     </div>
-                    <div class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
-                        <svg class="theme-icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="5" />
-                            <path
-                                d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                        </svg>
-                        <svg class="theme-icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-                        </svg>
-                    </div>
+                </div>
+                <div class="theme-btn" onclick="toggleTheme()" title="Toggle theme">
+                    <svg class="theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg class="theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </div>
             </div>
         </header>
-
         <section class="hero">
-            <div class="hero-badge">
-                <span class="badge-dot"></span>
-                <span data-i18n="hero_badge">Next-Gen Intelligence Hub</span>
-            </div>
-            <h1>
-                <span data-i18n="hero_title">Connect Without Limits,<br>Intelligence <span class="highlight">Without
-                        Boundaries</span></span>
-            </h1>
-            <p data-i18n="hero_desc">An AI aggregation hub built for productivity enthusiasts. One-click access to
-                next-gen
-                Agent intelligences, immersive Chat conversations, and a universal productivity tool ecosystem.</p>
+            <div class="hero-badge"><div class="badge-dot"></div><span data-i18n="hero_badge">Next-Gen Intelligence Hub</span></div>
+            <h1 data-i18n="hero_title">Connect Without Limits,<br>Intelligence <span class="highlight">Without Boundaries</span></h1>
+            <p data-i18n="hero_desc">An AI aggregation hub built for productivity enthusiasts. One-click access to next-gen Agent intelligences, immersive Chat conversations, and a universal productivity tool ecosystem.</p>
         </section>
-
-        <main class="container">
+        <div class="container">
             <div class="section-header">
-                <span class="grid-title" data-i18n="grid_title">Featured Modules</span>
-                <span class="section-count">04</span>
+                <h2 class="grid-title" data-i18n="grid_title">Featured Modules</h2>
+                <span class="section-count">4</span>
             </div>
             <div class="tools-grid">
-                <a href="#" class="tool-card">
+                <a href="https://chatgpt.com" target="_blank" class="tool-card">
                     <div class="card-icon">💬</div>
                     <div class="card-body">
-                        <div class="card-body-top">
-                            <h3 data-i18n="card1_title">Lightning Chat</h3>
-                            <span class="go-arrow">→</span>
-                        </div>
-                        <p data-i18n="card1_desc">Multi-scenario intelligent interaction terminal with immersive
-                            dialogue
-                            and rapid multimedia response.</p>
+                        <div class="card-body-top"><h3 data-i18n="card1_title">Lightning Chat</h3><span class="go-arrow">→</span></div>
+                        <p data-i18n="card1_desc">Multi-scenario intelligent interaction terminal with immersive dialogue and rapid multimedia response.</p>
                     </div>
                 </a>
-                <a href="#" class="tool-card">
-                    <div class="card-icon">⚙️</div>
+                <a href="https://agents.phala.network" target="_blank" class="tool-card">
+                    <div class="card-icon">🤖</div>
                     <div class="card-body">
-                        <div class="card-body-top">
-                            <h3 data-i18n="card2_title">Agent Development</h3>
-                            <span class="go-arrow">→</span>
-                        </div>
-                        <p data-i18n="card2_desc">Low-barrier automation. Customize digital employees with long-term
-                            memory
-                            and automated workflows.</p>
+                        <div class="card-body-top"><h3 data-i18n="card2_title">Agent Development</h3><span class="go-arrow">→</span></div>
+                        <p data-i18n="card2_desc">Low-barrier automation. Customize digital employees with long-term memory and automated workflows.</p>
                     </div>
                 </a>
-                <a href="#" class="tool-card">
-                    <div class="card-icon">🛠️</div>
+                <a href="https://tool.ai" target="_blank" class="tool-card">
+                    <div class="card-icon">🧰</div>
                     <div class="card-body">
-                        <div class="card-body-top">
-                            <h3 data-i18n="card3_title">Universal AI Toolbox</h3>
-                            <span class="go-arrow">→</span>
-                        </div>
-                        <p data-i18n="card3_desc">Copywriting, image processing, code assistance and other ready-to-use
-                            productivity tools.</p>
+                        <div class="card-body-top"><h3 data-i18n="card3_title">Universal AI Toolbox</h3><span class="go-arrow">→</span></div>
+                        <p data-i18n="card3_desc">Copywriting, image processing, code assistance and other ready-to-use productivity tools.</p>
                     </div>
                 </a>
-                <a href="#" class="tool-card">
-                    <div class="card-icon">✨</div>
+                <a href="https://promptbase.com" target="_blank" class="tool-card">
+                    <div class="card-icon">📚</div>
                     <div class="card-body">
-                        <div class="card-body-top">
-                            <h3 data-i18n="card4_title">Smart Prompt Library</h3>
-                            <span class="go-arrow">→</span>
-                        </div>
-                        <p data-i18n="card4_desc">Curated structured prompt matrix tested across multiple scenarios,
-                            unlocking stronger potential.</p>
+                        <div class="card-body-top"><h3 data-i18n="card4_title">Smart Prompt Library</h3><span class="go-arrow">→</span></div>
+                        <p data-i18n="card4_desc">Curated structured prompt matrix tested across multiple scenarios, unlocking stronger potential.</p>
                     </div>
                 </a>
             </div>
-        </main>
-
+        </div>
         <footer>
-            <p data-i18n="footer_text">\u00a9 2026 vHub</p>
+            <p data-i18n="footer_text">&copy; 2026 vHub</p>
             <div class="links-wrapper">
-                <a href="https://dify.ai" target="_blank" class="eco-link">Dify.ai <span>↗</span></a>
-                <a href="https://coze.com" target="_blank" class="eco-link">Coze <span>↗</span></a>
+                <a href="https://google.com" target="_blank" class="eco-link">Google <span>↗</span></a>
+                <a href="https://github.com" target="_blank" class="eco-link">GitHub <span>↗</span></a>
                 <a href="https://claude.ai" target="_blank" class="eco-link">Claude <span>↗</span></a>
                 <a href="https://codex.pro" target="_blank" class="eco-link">Codex <span>↗</span></a>
             </div>
         </footer>
-
     </div>
-
     <script>
-    (function() {
-        document.getElementById('host-display').textContent = window.location.hostname;
-        var overlay = document.getElementById('turnstile-overlay');
-        var content = document.getElementById('main-content');
-        var statusTitle = document.getElementById('turnstile-title');
-        var statusText = document.getElementById('turnstile-status');
-
-        fetch('/turnstile/config')
-            .then(function(res) { return res.json(); })
-            .then(function(data) {
-                if (!data.enabled || data.verified) {
-                    return;
-                }
-
-                overlay.classList.add('visible');
-
-                window.onTurnstileReady = function() {
-                    turnstile.render('#turnstile-widget', {
-                        sitekey: data.siteKey,
-                        theme: 'auto',
-                        callback: function(token) {
-                            statusTitle.textContent = '验证通过，正在处理...';
-                            statusText.textContent = '请稍候，正在确认您的身份。';
-                            fetch('/turnstile/verify', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({token: token})
-                            }).then(function(res) {
-                                if (res.ok) {
-                                    overlay.classList.remove('visible');
-                                } else {
-                                    statusTitle.textContent = '验证失败';
-                                    statusText.textContent = '安全验证未通过，请刷新页面后重试。';
-                                }
-                            }).catch(function() {
-                                statusTitle.textContent = '网络错误';
-                                statusText.textContent = '验证请求失败，请检查网络连接后刷新页面重试。';
-                            });
-                        },
-                        'error-callback': function() {
-                            statusTitle.textContent = '验证组件加载失败';
-                            statusText.textContent = '安全验证组件出现错误，请刷新页面后重试。';
-                        },
-                        'expired-callback': function() {
-                            statusTitle.textContent = '验证已超时';
-                            statusText.textContent = '安全验证已过期，请重新完成验证。';
-                        },
-                    });
-                };
-
-        var s = document.createElement('script');
-        s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady';
-        s.async = true;
-        s.defer = true;
-        document.head.appendChild(s);
-            })
-            .catch(function() {
-                statusTitle.textContent = '配置加载失败';
-                statusText.textContent = '无法获取安全验证配置，请刷新页面后重试。';
-            });
-    })();
-
         const i18n = {
-            en: {
-                hero_badge: 'Next-Gen Intelligence Hub',
-                hero_title: 'Connect Without Limits,<br>Intelligence <span class="highlight">Without Boundaries</span>',
-                hero_desc: 'An AI aggregation hub built for productivity enthusiasts. One-click access to next-gen Agent intelligences, immersive Chat conversations, and a universal productivity tool ecosystem.',
-                grid_title: 'Featured Modules',
-                card1_title: 'Lightning Chat',
-                card1_desc: 'Multi-scenario intelligent interaction terminal with immersive dialogue and rapid multimedia response.',
-                card2_title: 'Agent Development',
-                card2_desc: 'Low-barrier automation. Customize digital employees with long-term memory and automated workflows.',
-                card3_title: 'Universal AI Toolbox',
-                card3_desc: 'Copywriting, image processing, code assistance and other ready-to-use productivity tools.',
-                card4_title: 'Smart Prompt Library',
-                card4_desc: 'Curated structured prompt matrix tested across multiple scenarios, unlocking stronger potential.',
-                footer_text: '\u00a9 2026 vHub'
-            },
-            zh: {
-                hero_badge: '\u4e0b\u4e00\u4ee3\u667a\u80fd\u4e2d\u67a2',
-                hero_title: '\u8fde\u63a5\u65e0\u754c\uff0c<br>\u667a\u80fd<span class="highlight">\u65e0\u9650</span>',
-                hero_desc: '\u4e13\u4e3a\u6548\u7387\u6781\u5ba2\u6253\u9020\u7684 AI \u805a\u5408\u67a2\u7ebd\u3002\u5728\u8fd9\u91cc\u4e00\u952e\u89e6\u8fbe\u4e0b\u4e00\u4ee3 Agent \u667a\u80fd\u4f53\u3001\u6c89\u6d78\u5f0f Chat \u5bf9\u8bdd\u4e0e\u4e07\u80fd\u751f\u4ea7\u529b\u5e94\u7528\u5de5\u5177\u751f\u6001\u3002',
-                grid_title: '\u63a8\u8350\u529f\u80fd\u677f\u5757',
-                card1_title: '\u6781\u901f Chat \u5bf9\u8bdd',
-                card1_desc: '\u591a\u573a\u666f\u667a\u80fd\u4ea4\u4e92\u7ec8\u7aef\uff0c\u652f\u6301\u6c89\u6d78\u5f0f\u5bf9\u8bdd\u4e0e\u5feb\u901f\u591a\u5a92\u4f53\u54cd\u5e94\u3002',
-                card2_title: 'Agent \u667a\u80fd\u4f53\u5f00\u53d1',
-                card2_desc: '\u4f4e\u95e8\u69db\u81ea\u52a8\u5316\uff0c\u5b9a\u5236\u62e5\u6709\u957f\u671f\u8bb0\u5fc6\u4e0e\u81ea\u52a8\u5316\u5de5\u4f5c\u6d41\u7684\u6570\u5b57\u5458\u5de5\u3002',
-                card3_title: '\u4e07\u80fd AI \u5de5\u5177\u5e93',
-                card3_desc: '\u6587\u6848\u63d0\u70bc\u3001\u56fe\u50cf\u5904\u7406\u3001\u4ee3\u7801\u8f85\u52a9\u7b49\u5f00\u7bb1\u5373\u7528\u7684\u751f\u4ea7\u529b\u5de5\u5177\u3002',
-                card4_title: '\u667a\u80fd Prompt \u5e93',
-                card4_desc: '\u7cbe\u9009\u591a\u573a\u666f\u5b9e\u6d4b\u7684\u7ed3\u6784\u5316\u63d0\u793a\u8bcd\u77e9\u9635\uff0c\u4e00\u952e\u89e3\u9501\u66f4\u5f3a\u6f5c\u529b\u3002',
-                footer_text: '\u00a9 2026 vHub'
-            }
+            en: { hero_badge:'Next-Gen Intelligence Hub', hero_title:'Connect Without Limits,<br>Intelligence <span class="highlight">Without Boundaries</span>', hero_desc:'An AI aggregation hub built for productivity enthusiasts. One-click access to next-gen Agent intelligences, immersive Chat conversations, and a universal productivity tool ecosystem.', grid_title:'Featured Modules', card1_title:'Lightning Chat', card1_desc:'Multi-scenario intelligent interaction terminal with immersive dialogue and rapid multimedia response.', card2_title:'Agent Development', card2_desc:'Low-barrier automation. Customize digital employees with long-term memory and automated workflows.', card3_title:'Universal AI Toolbox', card3_desc:'Copywriting, image processing, code assistance and other ready-to-use productivity tools.', card4_title:'Smart Prompt Library', card4_desc:'Curated structured prompt matrix tested across multiple scenarios, unlocking stronger potential.', footer_text:'\u00a9 2026 vHub' },
+            zh: { hero_badge:'\u4e0b\u4e00\u4ee3\u667a\u80fd\u4e2d\u67a2', hero_title:'\u8fde\u63a5\u65e0\u754c\uff0c<br>\u667a\u80fd<span class="highlight">\u65e0\u9650</span>', hero_desc:'\u4e13\u4e3a\u6548\u7387\u6781\u5ba2\u6253\u9020\u7684 AI \u805a\u5408\u67a2\u7ebd\u3002\u5728\u8fd9\u91cc\u4e00\u952e\u89e6\u8fbe\u4e0b\u4e00\u4ee3 Agent \u667a\u80fd\u4f53\u3001\u6c89\u6d78\u5f0f Chat \u5bf9\u8bdd\u4e0e\u4e07\u80fd\u751f\u4ea7\u529b\u5e94\u7528\u5de5\u5177\u751f\u6001\u3002', grid_title:'\u63a8\u8350\u529f\u80fd\u677f\u5757', card1_title:'\u6781\u901f Chat \u5bf9\u8bdd', card1_desc:'\u591a\u573a\u666f\u667a\u80fd\u4ea4\u4e92\u7ec8\u7aef\uff0c\u652f\u6301\u6c89\u6d78\u5f0f\u5bf9\u8bdd\u4e0e\u5feb\u901f\u591a\u5a92\u4f53\u54cd\u5e94\u3002', card2_title:'Agent \u667a\u80fd\u4f53\u5f00\u53d1', card2_desc:'\u4f4e\u95e8\u69db\u81ea\u52a8\u5316\uff0c\u5b9a\u5236\u62e5\u6709\u957f\u671f\u8bb0\u5fc6\u4e0e\u81ea\u52a8\u5316\u5de5\u4f5c\u6d41\u7684\u6570\u5b57\u5458\u5de5\u3002', card3_title:'\u4e07\u80fd AI \u5de5\u5177\u5e93', card3_desc:'\u6587\u6848\u63d0\u70bc\u3001\u56fe\u50cf\u5904\u7406\u3001\u4ee3\u7801\u8f85\u52a9\u7b49\u5f00\u7bb1\u5373\u7528\u7684\u751f\u4ea7\u529b\u5de5\u5177\u3002', card4_title:'\u667a\u80fd Prompt \u5e93', card4_desc:'\u7cbe\u9009\u591a\u573a\u666f\u5b9e\u6d4b\u7684\u7ed3\u6784\u5316\u63d0\u793a\u8bcd\u77e9\u9635\uff0c\u4e00\u952e\u89e3\u9501\u66f4\u5f3a\u6f5c\u529b\u3002', footer_text:'\u00a9 2026 vHub' }
         };
-
         let currentLang = localStorage.getItem('vhub_lang') || 'en';
-
         function applyLanguage(lang) {
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(el => {
+            document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (i18n[lang] && i18n[lang][key]) {
-                    el.innerHTML = i18n[lang][key];
-                }
+                if (i18n[lang] && i18n[lang][key]) el.innerHTML = i18n[lang][key];
             });
             document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
-            document.querySelectorAll('.lang-dropdown-item').forEach(item => {
-                item.classList.toggle('active', item.getAttribute('data-lang') === lang);
-            });
-            currentLang = lang;
-            localStorage.setItem('vhub_lang', lang);
+            document.querySelectorAll('.lang-dropdown-item').forEach(item => item.classList.toggle('active', item.getAttribute('data-lang') === lang));
+            currentLang = lang; localStorage.setItem('vhub_lang', lang);
         }
-
-        function setLanguage(lang) {
-            applyLanguage(lang);
-            closeDropdown();
-        }
-
-        function toggleDropdown() {
-            document.getElementById('langDropdown').classList.toggle('open');
-        }
-
-        function closeDropdown() {
-            document.getElementById('langDropdown').classList.remove('open');
-        }
-
-        document.addEventListener('click', function (e) {
+        function setLanguage(lang) { applyLanguage(lang); closeDropdown(); }
+        function toggleDropdown() { document.getElementById('langDropdown').classList.toggle('open'); }
+        function closeDropdown() { document.getElementById('langDropdown').classList.remove('open'); }
+        document.addEventListener('click', function(e) {
             const wrapper = document.querySelector('.lang-wrapper');
-            if (wrapper && !wrapper.contains(e.target)) {
-                closeDropdown();
-            }
+            if (wrapper && !wrapper.contains(e.target)) closeDropdown();
         });
-
         applyLanguage(currentLang);
-
-        /* ===== THEME TOGGLE ===== */
         const savedTheme = localStorage.getItem('vhub_theme');
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-
+        if (savedTheme) document.documentElement.setAttribute('data-theme', savedTheme);
         function toggleTheme() {
             const root = document.documentElement;
             const current = root.getAttribute('data-theme');
@@ -947,5 +201,4 @@
         }
     </script>
 </body>
-
 </html>

@@ -28,8 +28,8 @@
 	],
 	"keep_vars": true,
 	"vars": {
-		"ADMIN": "admin",
-	}
+		"ADMIN": "admin"
+	},
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement

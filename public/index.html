@@ -1,32 +1,149 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<p>This page comes from a static asset stored at `public/index.html` as configured in `wrangler.jsonc`.</p>
-		<button id="button" type="button">Fetch a random UUID</button>
-		<output id="random" for="button"></output>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>安全验证</title>
+    <link rel="preconnect" href="https://challenges.cloudflare.com" />
+    <style>
+        :root {
+            --bg: #ffffff; --text-primary: #111111;
+            --text-secondary: #3a3c42; --text-muted: #6b7078;
+            --accent: #5b21b6; --accent-light: rgba(91,33,182,0.08);
+        }
+        @media (prefers-color-scheme:dark) {
+            :root {
+                --bg: #0a0a0b; --text-primary: #f0f0f2;
+                --text-secondary: #a1a1aa; --text-muted: #71717a;
+                --accent: #a855f7; --accent-light: rgba(168,85,247,0.12);
+            }
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%;background:var(--bg);font-family:system-ui,-apple-system,sans-serif}
 
-			const button = document.getElementById("button");
-			button.addEventListener("click", () => {
-				fetch('/random')
-					.then((resp) => resp.text())
-					.then((text) => {
-						const random = document.getElementById('random');
-						random.textContent = text;
-					});
-			});
-		</script>
-	</body>
+        #turnstile-overlay {
+            position:fixed !important;top:0;left:0;right:0;bottom:0;
+            width:100vw;height:100vh;z-index:99999;margin:0;padding:0;
+            display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;
+            background:#fff;color:#111;opacity:0;pointer-events:none;transition:opacity 0.6s ease;
+        }
+        #turnstile-overlay.visible{opacity:1;pointer-events:auto}
+        .overlay-content{text-align:left;max-width:700px;padding:5rem 3rem 5rem 6rem;color:#111}
+        .overlay-header{display:flex;align-items:center;gap:1.25rem;margin-bottom:1.75rem}
+        .et-icon{width:48px;height:48px;flex-shrink:0}
+        .overlay-content h1{font-size:2.4rem;font-weight:700;color:#1d1d1f;margin:0;white-space:nowrap;letter-spacing:-0.02em}
+        .overlay-content h2{font-size:2rem;font-weight:700;color:#1d1d1f;margin-bottom:1rem;letter-spacing:-0.01em}
+        .overlay-content p{font-size:1.05rem;color:#3a3c42;line-height:1.6;margin-bottom:2.5rem;white-space:nowrap}
+        @media(max-width:768px){
+            .overlay-content{padding:3rem 2rem;max-width:100%}#turnstile-overlay.visible{padding-top:20vh}
+            .overlay-content h1{font-size:1.8rem;white-space:normal}.overlay-content h2{font-size:1.4rem}
+            .overlay-content p{white-space:normal}
+        }
+    </style>
+</head>
+<body>
+    <div id="turnstile-overlay">
+        <div class="overlay-content">
+            <div class="overlay-header">
+                <svg class="et-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs><linearGradient id="et-grad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a855f7"/><stop offset="1" stop-color="#6366f1"/></linearGradient></defs>
+                    <ellipse cx="32" cy="34" rx="20" ry="18" fill="url(#et-grad)"/>
+                    <ellipse cx="24" cy="30" rx="5" ry="8" fill="#fff" fill-opacity="0.85"/>
+                    <ellipse cx="24" cy="30" rx="2.5" ry="5" fill="#1d1d1f"/>
+                    <ellipse cx="40" cy="30" rx="5" ry="8" fill="#fff" fill-opacity="0.85"/>
+                    <ellipse cx="40" cy="30" rx="2.5" ry="5" fill="#1d1d1f"/>
+                    <path d="M26 18l-8-10" stroke="url(#et-grad)" stroke-width="3" stroke-linecap="round"/>
+                    <path d="M38 18l8-10" stroke="url(#et-grad)" stroke-width="3" stroke-linecap="round"/>
+                    <circle cx="18" cy="8" r="3" fill="url(#et-grad)"/><circle cx="46" cy="8" r="3" fill="url(#et-grad)"/>
+                </svg>
+                <h1 id="host-display"></h1>
+            </div>
+            <h2 id="turnstile-title">正在进行安全验证</h2>
+            <p id="turnstile-status">本网站使用安全服务防护恶意自动程序。在验证您不是自动程序期间，将显示此页面。</p>
+            <div id="turnstile-widget"></div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        document.getElementById('host-display').textContent = window.location.hostname;
+        var overlay = document.getElementById('turnstile-overlay');
+        var statusTitle = document.getElementById('turnstile-title');
+        var statusText = document.getElementById('turnstile-status');
+
+        function loadContent(html) {
+            var div = document.createElement('div');
+            div.innerHTML = html;
+            var scripts = div.querySelectorAll('script');
+            scripts.forEach(function(s) {
+                var ns = document.createElement('script');
+                if (s.src) ns.src = s.src;
+                ns.textContent = s.textContent;
+                document.body.appendChild(ns);
+                s.remove();
+            });
+            while (div.firstChild) {
+                document.body.appendChild(div.firstChild);
+            }
+        }
+
+        fetch('/turnstile/config')
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (!data.enabled || data.verified) {
+                    fetch('/welcome').then(function(r) { return r.text(); }).then(loadContent);
+                    return;
+                }
+
+                overlay.classList.add('visible');
+                window.onTurnstileReady = function() {
+                    turnstile.render('#turnstile-widget', {
+                        sitekey: data.siteKey, theme: 'auto',
+                        callback: function(token) {
+                            statusTitle.textContent = '验证通过，正在处理...';
+                            statusText.textContent = '请稍候，正在确认您的身份。';
+                            fetch('/turnstile/verify', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({token: token})
+                            }).then(function(res) {
+                                if (res.ok) {
+                                    fetch('/welcome')
+                                        .then(function(r) { return r.text(); })
+                                        .then(function(html) {
+                                            loadContent(html);
+                                            overlay.classList.remove('visible');
+                                        });
+                                } else {
+                                    statusTitle.textContent = '验证失败';
+                                    statusText.textContent = '安全验证未通过，请刷新页面后重试。';
+                                }
+                            }).catch(function() {
+                                statusTitle.textContent = '网络错误';
+                                statusText.textContent = '验证请求失败，请检查网络连接后刷新页面重试。';
+                            });
+                        },
+                        'error-callback': function() {
+                            statusTitle.textContent = '验证组件加载失败';
+                            statusText.textContent = '安全验证组件出现错误，请刷新页面后重试。';
+                        },
+                        'expired-callback': function() {
+                            statusTitle.textContent = '验证已超时';
+                            statusText.textContent = '安全验证已过期，请重新完成验证。';
+                        },
+                    });
+                };
+                var s = document.createElement('script');
+                s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileReady';
+                s.async = true; s.defer = true;
+                document.head.appendChild(s);
+            })
+            .catch(function() {
+                statusTitle.textContent = '配置加载失败';
+                statusText.textContent = '无法获取安全验证配置，请刷新页面后重试。';
+            });
+    })();
+    </script>
+</body>
 </html>

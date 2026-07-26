@@ -6,8 +6,8 @@
   "scripts": {
     "build": "rm -rf dist && wrangler deploy --dry-run  && cp wrangler.jsonc dist/",
     "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
+    "dev": "WRANGLER_LOCAL=true wrangler dev",
+    "start": "WRANGLER_LOCAL=true wrangler dev",
     "test": "vitest"
   },
   "devDependencies": {
