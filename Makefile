@@ -10,3 +10,16 @@ cf-pages: clean
 
 clean:
 	rm -rf dist output
+
+build: clean
+	echo "Build ..."
+	npm run build
+
+dist: build
+	echo "Dist ..."
+
+preview:
+	npm run start
+
+deploy:
+	npm run deploy
