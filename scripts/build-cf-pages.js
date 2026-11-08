@@ -163,6 +163,10 @@ fs.copyFileSync(
     path.join(ROOT, 'wrangler.toml'),
     path.join(distDir, 'wrangler.toml'),
 );
+fs.copyFileSync(
+    path.join(path.join(ROOT, 'pages'), 'index.html'),
+    path.join(distDir, 'index.html'),
+);
 
 // ---------------------------------------------------------------------------
 // 8.  Report
